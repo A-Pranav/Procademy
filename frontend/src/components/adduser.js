@@ -1,20 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react';
+import { useNavigate } from "react-router-dom";
+import UserContext from "../contexts/userContext";
+
 // import axios from 'axios'
 // import { Link } from 'react-router-dom';
 // import Navbar from './navbar';
 export default function AddUser() {
+    const { setUserData } = useContext(UserContext);
+    const navigate = useNavigate();
+
+
     const [ user, setUser ] = useState({
-        firstName:"",
-        lastName:"",
-        userName:"",
-        email:"",
-        password:"",
-        profilePicture:""
+        firstName: "",
+        lastName: "",
+        userName: "",
+        email: "",
+        password: "",
+        profilePicture: ""
         // isInstructor,
     });
     async function userAdd(e) {
         e.preventDefault();
         const newUser = { ...user };
+        const loginDetails = { ...user.email,...user.password  };
         console.log(newUser);
         await fetch("http://localhost:9669/user/register", {
             method: "POST",
@@ -23,7 +31,24 @@ export default function AddUser() {
                 'Accept': 'application/json'
             },
             body: JSON.stringify(newUser)
-        }).then(resp => { console.log("resp=", resp); alert("user added") })
+        }).then(resp => { console.log("resp=", resp); }).then(alert("user added"));
+
+        const loginreq =await fetch("http://localhost:9669/user/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(loginDetails)
+        })
+        const loginResponse=await loginreq.json();
+        // .then(resp => { console.log("resp=", resp); }).then(resp=> {return resp});
+        setUserData({
+            token: loginResponse.data.token,
+            user: loginResponse.data.user
+        });
+        localStorage.setItem("auth-token", loginResponse.data.token);
+        navigate("/");
     };
     const fillData = (e) => {
         return setUser((prev) => {

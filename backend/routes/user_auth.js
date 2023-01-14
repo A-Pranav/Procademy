@@ -17,18 +17,18 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
     // let { _firstName, _lastName, _userName, _email, _password, _profilePicture } = req.body;
     try {
-        let _firstName=req.body.firstName;
-        let _lastName=req.body.lastName;
-        let _userName=req.body.userName;
-        let _password=req.body.password;
-        let _email=req.body.email;
-        let _profilePicture=req.body.profilePicture;
+        let _firstName = req.body.firstName;
+        let _lastName = req.body.lastName;
+        let _userName = req.body.userName;
+        let _password = req.body.password;
+        let _email = req.body.email;
+        let _profilePicture = req.body.profilePicture;
         // _profilePicture = "";
         // console.log();
         // console.log(req.body);
         // console.log(req.body);
         console.log(req.body);
-        let checkuser = await userModel.findOne({ email:_email });
+        let checkuser = await userModel.findOne({ email: _email });
         console.log(checkuser);
         if (checkuser) {
             return res.status(400).json({ msg: 'User already exists' });
@@ -36,6 +36,7 @@ router.post("/register", async (req, res) => {
         let salt = await bcrypt.genSalt(10);
         console.log("req.body.password", req.body.password);
         let n_password = await bcrypt.hash(_password, salt);
+        console.log();
         let str_id = Date.now().toString();
         let new_id = str_id.substr(-8);
         // uid = new userIDModel(new_id);
@@ -59,52 +60,132 @@ router.post("/register", async (req, res) => {
     }
 });
 
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+router.get("/check", authenticate, async (req, res) => {
+    const user = await userModel.findOne({ user_id: req.user });
+    res.json({
+        displayName: user.userName,
+        id: user.user_id
+    });
+});
 
+
+router.post('/tokenCheck', async (req, res) => {
+    // const { email, password } = req.body;
+    // let _email = req.body.email;
+    // let _password = req.body.password;
     try {
-        let user = await User.findOne({ email });
-        if (!user) {
-            return res
-                .status(400)
-                .json({ errors: [ { msg: 'Invalid Credentials' } ] });
+        const token = req.header("x-auth-token");
+        if (!token) {
+            return res.json(false);
         }
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res
-                .status(400)
-                .json({ errors: [ { msg: 'Invalid Credentials' } ] });
+        const tokenVerify = jwt.verify(token, process.env.JWT_SECRET);
+        if (!tokenVerify) {
+            return res.json(false);
         }
-        const payload = {
-            user: {
-                id: user.user_id,
-            },
-        };
-        jwt.sign(
-            payload,
-            process.env.JWT_SECRET,
-            // config.get('jwtSecret'),
-            { expiresIn: 360000 },
-            (err, token) => {
-                if (err) throw err;
-                res.cookie('token', token, { httpOnly: true }).sendStatus(200);
-            }
-        );
+        return res.json(true);
+        // let user = await userModel.findOne({ email: _email });
+        // console.log(user);
+        // if (!user) {
+        //     return res
+        //         .status(400)
+        //         .json({ errors: [ { msg: 'Invalid jhjh Credentials' } ] });
+        // }
+        // const isMatch = await bcrypt.compare(_password, user.password);
+        // if (!isMatch) {
+        //     return res
+        //         .status(400)
+        //         .json({ errors: [ { msg: 'Invalid Csvdfvdvredentials' } ] });
+        // }
+        // const payload = {
+        //     user: {
+        //         id: user.user_id,
+        //     },
+        // };
+        // console.log("inlogin");
+        // jwt.sign(
+        //     payload,
+        //     process.env.JWT_SECRET,
+        //     // config.get('jwtSecret'),
+        //     { expiresIn: 360000 },
+        //     (err, token) => {
+        //         if (err) {
+        //             throw err;
+        //         }
+        //         console.log("token", token);
+        //         console.log("token added");
+        //     }
+        // );
+        // res.json({token , user:{U_id:user_id}});
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
     }
 });
 
-
-router.post('/logout', authenticate, (req, res) => {
+router.post('/login', async (req, res) => {
+    // const { email, password } = req.body;
+    let _email = req.body.email;
+    let _password = req.body.password;
     try {
-        res.clearCookie('token').sendStatus(200);
+        let user = await userModel.findOne({ email: _email });
+        console.log(user);
+        if (!user) {
+            return res
+                .status(400)
+                .json({ errors: [ { msg: 'Invalid jhjh Credentials' } ] });
+        }
+        const isMatch = await bcrypt.compare(_password, user.password);
+        if (!isMatch) {
+            return res
+                .status(400)
+                .json({ errors: [ { msg: 'Invalid Csvdfvdvredentials' } ] });
+        }
+        const payload = {
+            id: user.user_id,
+        };
+        console.log("inlogin");
+        const _token = jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            // config.get('jwtSecret'),
+            // { expiresIn: 360000 },
+            // (err, token) => {
+            //     if (err) {
+            //         throw err;
+            //     }
+            //     else {
+            //         console.log("token", token);
+            //         console.log("token added");
+            //     }
+            // }
+        );
+        // let resp = {
+        //     token: _token
+        // }
+        // res.json({
+        //     resp
+        // });
+
+        res.json({
+            user: {
+                id: user.user_id, displayName: user.userName
+            },token: _token
+        });
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
+        console.error(err);
+        res.status(500).send('Server error');
     }
 });
+
+
+// router.post('/logout', authenticate, (req, res) => {
+//     try {
+//         res.clearCookie('token').sendStatus(200);
+//     } catch (err) {
+//         console.error(err.message);
+//         res.status(500).send('Server Error');
+//     }
+// });
 
 
 router.put('/edit', authenticate, async (req, res) => {
