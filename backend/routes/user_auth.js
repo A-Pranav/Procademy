@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import userModel from "../database/users/userModel.js"
 // import userIDModel from "../database/users/userIDModel.js"
 import authenticate from "../middlewares/authenticate.js";
+import courseModel from "../database/course/courseModel.js";
 // import { check } from "express-validator";
 
 
@@ -169,7 +170,7 @@ router.post('/login', async (req, res) => {
         res.json({
             user: {
                 id: user.user_id, displayName: user.userName
-            },token: _token
+            }, token: _token
         });
     } catch (err) {
         console.error(err);
@@ -225,5 +226,40 @@ router.put('/edit', authenticate, async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+
+
+
+router.post("/created", async (req, res) => {
+    try {
+        let _userid = req.body.userId;
+        console.log("req._userid= ", _userid);
+        const user = await userModel.findOne({ user_id: _userid });
+        let course_ids = user.courses_created;
+        console.log("user created course_ids", course_ids);
+        const courses_data = await courseModel.find({ course_id: { $in: course_ids } });
+        console.log("created courses_data",courses_data);
+        res.status(200).send(courses_data)
+    }
+    catch (err) {
+        console.log("error found", err);
+        res.status(500).send(err);
+    }
+})
+router.post("/enrolled", async (req, res) => {
+    try {
+        let _userid = req.body.userId;
+        console.log("req._userid= ", _userid);
+        const user = await userModel.findOne({ user_id: _userid });
+        let course_ids = user.courses_enrolled;
+        console.log("user created course_ids", course_ids);
+        const courses_data = await courseModel.find({ course_id: { $in: course_ids } });
+        console.log("enrolled courses_data",courses_data);
+        res.status(200).send(courses_data)
+    }
+    catch (err) {
+        console.log("error found", err);
+        res.status(500).send(err);
+    }
+})
 
 export default router;

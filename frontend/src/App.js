@@ -13,6 +13,10 @@ import Home from './components/home';
 import CreateCourse from './components/createCourse';
 import AllCourse from './components/allCourse';
 import GetCourse from './components/getCourse';
+import MyCourses from './components/myCourses';
+import MyLearning from './components/myLearning';
+import EditCourse from './components/editCourse';
+import LearnCourse from './components/learnCourse';
 
 
 // import GetAllUsers from "./component/getAllUsers";
@@ -76,8 +80,12 @@ function App() {
 					<Route path="/register" element={<AddUser />} />
 					<Route path="/login" element={<UserLogin />} />
 					<Route path="/courses" element={<AllCourse />} />
+					<Route path="/user/courses" element={<MyCourses />} />
+					<Route path="/user/mylearning" element={<MyLearning />} />
 					<Route path="/course/create" element={<CreateCourse />} />
 					<Route path="/course/:link/" element={<GetCourse/>} />
+					<Route path="/course/edit/:link/" element={<EditCourse/>} />
+					<Route path="/course/:link/learn/" element={<LearnCourse/>} />
 					{/* <Route path="/allusers" element={<GetAllUsers />} /> */}
 					{/* <Route path="/edituser/:customId" element={<EditUser />} /> */}
 				</Routes>

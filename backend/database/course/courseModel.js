@@ -62,7 +62,12 @@ const courseSchema = mongoose.Schema({
         type: String,
         trim: true
     },
-    videos: [ videoID ]
+    videos: {
+        type: [String],
+        required: true,
+        minLength: 4,
+        maxLength: 300
+    }
 })
 
 export default mongoose.model("course", courseSchema);

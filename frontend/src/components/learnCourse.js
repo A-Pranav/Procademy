@@ -1,17 +1,13 @@
-// import { mongo } from 'mongoose';
 import React, { useContext, useState, useEffect } from 'react'
 import { useNavigate, Link, useParams } from 'react-router-dom';
 // import Navbar from './navbar';
 import UserContext from "../contexts/userContext";
-
-
-export default function GetCourse() {
+export default function LearnCourse() {
     const { userData } = useContext(UserContext);
     const [ isLoading, setIsLoading ] = useState(true);
     const [ alreadyEnrolled, setalreadyEnrolled ] = useState(true);
     const navigate = useNavigate();
-    // const [ found, setFound ] = useState(0);
-    // let [ request_data, setRequestData ] = useState([]);
+
     const [ course, setCourse ] = useState({
         title: "",
         course_id: "",
@@ -55,7 +51,7 @@ export default function GetCourse() {
         };
         const checkEnrolled = async () => {
             setIsLoading(true);
-            if(!userData.user){
+            if (!userData.user) {
                 navigate("/login");
             }
             let enroller = {
@@ -76,8 +72,8 @@ export default function GetCourse() {
             })
             // .then(resp => { console.log("this is resp=", resp) }).then(resp=>{return resp})
             let data = await response.json();
-            console.log("checkcheckcheckcheck",data);
-            if(response.status==200){
+            console.log("checkcheckcheckcheck", data);
+            if (response.status == 200) {
                 if (data.already_enrolled == true) {
                     console.log("truuuuuueeeeeeeee");
                     setalreadyEnrolled(true);
@@ -98,65 +94,33 @@ export default function GetCourse() {
         // console.log("editedcourse insideeee effect", editedcourse);
         // console.log("request_data inside effect", request_data);
     }, []);
-    const enrollCourse = async (e) => {
-        e.preventDefault();
-        let enroller = {
-            courseId: course.course_id,
-            userId: userData.user.id
-        }
-        await fetch(`http://localhost:9669/course/enrollCourse`, {
-            method: "POST",
-            // mode: 'no-cors',
-            headers: {
-                "Content-Type": "application/json",
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(enroller)
-        }).then(resp => { console.log("resp=", resp) })
-    };
-    // const deletecourse = async (e) => {
+    // const enrollCourse = async (e) => {
     //     e.preventDefault();
-    //     await fetch(`http://localhost:9669/course/${link}`, {
-    //         method: "DELETE",
+    //     let enroller = {
+    //         courseId: course.course_id,
+    //         userId: userData.user.id
+    //     }
+    //     await fetch(`http://localhost:9669/course/enrollCourse`, {
+    //         method: "POST",
     //         // mode: 'no-cors',
     //         headers: {
     //             "Content-Type": "application/json",
     //             'Accept': 'application/json'
-    //         }
-    //     }).then(resp => {
-    //         console.log("resp=", resp)
-    //         if (resp.status == 200) {
-    //         }
-    //     })
+    //         },
+    //         body: JSON.stringify(enroller)
+    //     }).then(resp => { console.log("resp=", resp) })
     // };
-    if (isLoading) { return <div>Loading...</div>; }
+
     return (
-        <div className="container">
-            {/* getCourse{console.log("course.name", course.name)} */}
-            <div className="card" style={{ "width": "18rem" }}>
-                <div className="card-body">
-                    <h5 className="card-title">{course.title}</h5>
-                    {/* <p className="card-text">ID: {course.}</p> */}
-                </div>
-                <ul className="list-group list-group-flush">
-                    <li className="list-group-item">Summary: {course.summary}</li>
-                    <li className="list-group-item">Creator: {course.creator}</li>
-                    <li className="list-group-item">level: {course.level}</li>
-                    <li className="list-group-item">category: {course.category}</li>
-                    <li className="list-group-item">enrollments: {course.enrollments}</li>
-                    <li className="list-group-item">duration: {course.duration}</li>
-                    <li className="list-group-item">rating: {course.rating}</li>
-                </ul>
-                <div className="card-body">
-                    {
-                        alreadyEnrolled ?
-                        <Link to={"/course/" +course.link+"/learn"}><a className="btn btn-success" style={{ cursor: "pointer", marginRight: "5px" }}>go to videos</a></Link>
-                        :
-                        <button onClick={enrollCourse} className="btn btn-success" style={{ cursor: "pointer", marginRight: "5px" }}>enrollCourse</button>
-                    }
-                </div>
-                <hr />
-            </div>
-        </div>
+        <>
+            <div>LearnCourse</div>
+            course.title=============={course.title} <br />
+            course.summary=============={course.summary} <br />
+            course.course_id=============={course.course_id} <br />
+            course.creator=============={course.creator} <br />
+            course.level=============={course.level} <br />
+            course.category=============={course.category} <br />
+            course.enrollments=============={course.enrollments} <br />
+        </>
     )
 }

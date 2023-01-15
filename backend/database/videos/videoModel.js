@@ -3,29 +3,54 @@ import userID from "../users/userIDModel.js";
 
 
 const videoSchema = mongoose.Schema({
-    title:{
-        type:String,
-        required:true,
+    title: {
+        type: String,
+        required: true,
         minLength: 2,
         maxLength: 300
     },
-    summary:{
-        type:String,
+    discription: {
+        type: String,
         trim: true,
     },
-    creator_id:userID,
-    course_id:{
-        type:String,
-        required:true,
+    video_id: {
+        type: String,
+        required: true,
+        minLength: 4,
+        maxLength: 300
     },
-    likes:{
-        type:Number
+    video_name: {
+        type: String,
+        required: true,
+        minLength: 4,
+        maxLength: 300
     },
-    video_link:{
-        type:String,
+    creator_id: {
+        type: String,
+        required: true,
+        minLength: 4,
+        maxLength: 300
     },
-    video_thumbnail:{
-        type:String,
+    creator_name: {
+        type: String,
+        required: true,
+        minLength: 4,
+        maxLength: 300
+    },
+    course_id: {
+        type: String,
+        required: true,
+        minLength: 4,
+        maxLength: 300
+    },
+    likes: {
+        type: Number
+    },
+    video_link: {
+        type: String,
+    },
+    video_thumbnail: {
+        type: String,
     },
 });
 

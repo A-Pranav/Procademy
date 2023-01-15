@@ -6,7 +6,6 @@ export const videoID = mongoose.Schema({
         type:String,
         required:true,
     },
-    course_id:courseID
 });
 
 // export default mongoose.model("videoID", videoID);

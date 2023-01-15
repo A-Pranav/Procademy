@@ -127,6 +127,35 @@ router.post("/checkEnrolled", async (req, res) => {
 })
 
 
+router.post("/checkCreator", async (req, res) => {
+    try {
+        // console.log("req.body= ", req.body);
+        let _courseLink = req.body.courseLink;
+        let _userid = req.body.userId;
+        // console.log("req._courseId= ", _courseLink);
+        // console.log("req._userid= ", _userid);
+        console.log("req.body           ",req.body);
+        const course = await courseModel.findOne({ link: _courseLink });
+        console.log("course           ",course);
+        if (course) {
+            // console.log(typeof ("typeofuser.courses_enrolled", user.courses_enrolled));
+            console.log("course.creator", course.creator);
+            if (course.creator == _userid) {
+                console.log("is the creator");
+                return res.json({ isCreator: true })
+            } else {
+                console.log("not he creator");
+                return res.json({ isCreator: false })
+            }
+        }
+
+    } catch (err) {
+        console.log("err", err);
+        res.status(500).send(err);
+    }
+})
+
+
 router.post("/enrollCourse", async (req, res) => {
     try {
         // console.log("req.body= ", req.body);
