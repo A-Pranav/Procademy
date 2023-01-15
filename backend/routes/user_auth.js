@@ -38,7 +38,7 @@ router.post("/register", async (req, res) => {
         let n_password = await bcrypt.hash(_password, salt);
         console.log();
         let str_id = Date.now().toString();
-        let new_id = str_id.substr(-8);
+        let new_id = str_id.substring(-8);
         // uid = new userIDModel(new_id);
         let user = new userModel({
             user_id: new_id,

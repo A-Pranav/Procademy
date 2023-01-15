@@ -91,11 +91,18 @@ const userSchema = mongoose.Schema({
     },
     // user_id: userID,
     courses_enrolled: {
-        type:[ courseID ],
+        type: [String],
+        required: true,
+        minLength: 4,
+        maxLength: 300,
         default:[]
+        // type:[ courseID ],
     },
     courses_created:{
-        type:[ courseID ],
+        type: [String],
+        required: true,
+        minLength: 4,
+        maxLength: 300,
         default:[]
     }
 });

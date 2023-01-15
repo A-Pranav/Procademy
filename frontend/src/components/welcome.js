@@ -1,12 +1,15 @@
 import React, { useEffect, useContext } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import UserContext from '../contexts/userContext';
 export default function Welcome() {
     const { userData } = useContext(UserContext);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
+    console.log(userData);
     useEffect(() => {
-        if (!userData.user)
-            navigate("/login");
+        if (!userData.user){
+            console.log("not logged in");
+        }
+            // navigate("/login");
     }, []);
     return (
         <div>
