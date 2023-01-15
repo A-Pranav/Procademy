@@ -25,6 +25,17 @@ export default function EditCourse() {
 		// duration: "",
 		// rating: ""
 	});
+	// const [ editedCourse, setEditedCourse ] = useState({
+	// 	title: "",
+	// 	course_id: "",
+	// 	summary: "",
+	// 	creator: "",
+	// 	level: "",
+	// 	category: ""
+	// 	// enrollments: "",
+	// 	// duration: "",
+	// 	// rating: ""
+	// });
 	useEffect(() => {
 		setIsLoading(true);
 		const fetcher = async () => {
@@ -34,7 +45,7 @@ export default function EditCourse() {
 
 			if (response.status == 200) {
 				let data = await response.json();
-				setCourse(data);
+				// setCourse(data);
 				course.title = data.title;
 				course.summary = data.summary;
 				course.course_id = data.course_id;
@@ -56,16 +67,16 @@ export default function EditCourse() {
 
 		const GetAllVideos = async () => {
 			setIsLoading(true);
-			let details={
+			let details = {
 				courseId: course.course_id
 			};
-			let response = await fetch(`http://localhost:9669/videos/listCourseVideos`, {
+			let response = await fetch(`http://localhost:9669/video/listCourseVideos`, {
 				method: "POST",
 				headers: {
-                    "Content-Type": "application/json",
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(details)
+					"Content-Type": "application/json",
+					'Accept': 'application/json'
+				},
+				body: JSON.stringify(details)
 			});
 
 			if (response.status == 200) {
@@ -124,9 +135,10 @@ export default function EditCourse() {
 		fetcher();
 	}, []);
 	const submitEditData = async (e) => {
-		e.preventDefault();
+		// e.preventDefault();
 		const newEdit = { ...course };
-		console.log(newEdit);
+
+		console.log("newEdit",newEdit);
 		await fetch(`http://localhost:9669/course/updateCourse/${link}`, {
 			method: "PUT",
 			// mode: 'no-cors',
@@ -135,7 +147,7 @@ export default function EditCourse() {
 				'Accept': 'application/json'
 			},
 			body: JSON.stringify(newEdit)
-		}).then(resp => { console.log("resp=", resp) })
+		}).then(resp => { console.log("resp=", resp); alert("UDATED")})
 	};
 	if (isLoading) { return <div>Loading...</div>; }
 	if (!isCreator) { return <div>Unauthorized</div>; }
@@ -148,24 +160,24 @@ export default function EditCourse() {
 				<div>
 					{/* <h2>ID={customId}</h2> */}
 					<h3>Add new title</h3>
-					< input type="text" name="name" id="e_name" placeholder="Enter Name Here"
+					< input type="text" name="name" id="title" placeholder=""
 						value={course.title}
 						onChange={(e) => setCourse({ ...course, title: e.target.value })}
 					/>
 					<h3>Add new summary</h3>
-					<textarea type="text" name="streetAddress" id="e_streetAddress" placeholder="Enter street Address Here"
+					<textarea type="text" name="summary" id="summary" placeholder=""
 						value={course.summary}
 						onChange={(e) => setCourse({ ...course, summary: e.target.value })}
 					/>
 					<h3>Add new level</h3>
-					<input type="text" name="pincode" id="e_pincode" placeholder="Enter pincode Here"
+					<input type="text" name="level" id="level" placeholder=""
 						value={course.level}
-						onChange={(e) => setCourse({ ...course, level: e.target.level })}
+						onChange={(e) => setCourse({ ...course, level: e.target.value })}
 					/>
 					<h3>Add new category</h3>
-					<input type="text" name="state" id="e_state" placeholder="Enter state Here"
+					<input type="text" name="category" id="category" placeholder=""
 						value={course.category}
-						onChange={(e) => setCourse({ ...course, category: e.target.category })}
+						onChange={(e) => setCourse({ ...course, category: e.target.value })}
 					/>
 					<br />
 					<br />
@@ -187,27 +199,26 @@ export default function EditCourse() {
 										<th>discription</th>
 										<th>Creator Name</th>
 										<th>Likes</th>
-										<th>video_link</th>
+										<th>video link</th>
 									</tr>
 								</thead>
 								<tbody>
 									{
-										course.map((course) => {
-											console.log("<td>{course.custom_id}</td>", course.custom_id);
+										videos.map((video) => {
+											//console.log("<td>{course.custom_id}</td>", course.custom_id);
 											return <tr>
-												<th style={{ cursor: "pointer" }} ><Link to={"/course/" + course.link}><a>{course.title}</a></Link></th>
-												<td>{course.summary}</td>
-												<td>{course.creatorName}</td>
-												<td>{course.level}</td>
-												<td>{course.categories}</td>
-												<td>{course.enrollments}</td>
-												<td>{course.duration}</td>
-												<td>{course.rating}</td>
+												<td>{video.title}</td>
+												<td>{video.discription}</td>
+												<td>{video.creator_name}</td>
+												<td>{video.likes}</td>
+												<th style={{ cursor: "pointer" }} ><Link to={"/learn/" + video.video_link}><a>{video.video_link}</a></Link></th>
 											</tr>
 										})
 									}
 								</tbody>
 							</table>
+							<h1>Add another video</h1>
+							<AddVideo courseId={course.course_id} videos={course.videos} />
 						</>
 					}
 				</div>

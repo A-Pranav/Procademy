@@ -1,14 +1,11 @@
 import mongoose from "mongoose";
-// import {courseModel} from "../course/courseModel.js";
-import {courseID} from "../course/courseIDmodel.js";
-// import {userID} from "../users/userIDModel.js";
 
 var validateEmail = function (email) {
     var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return re.test(email)
 };
 
-const imgPath = "../images/";
+// const imgPath = "../images/";
 
 // const addressSchema = mongoose.Schema({
 //     streetAddress: {
@@ -71,11 +68,6 @@ const userSchema = mongoose.Schema({
         minlength: 5,
         maxlength: 1024
     },
-    isInstructor: {
-        type: Boolean,
-        default: false
-    },
-    // address: addressSchema,
     email: {
         type: String,
         trim: true,

@@ -29,7 +29,7 @@ const courseSchema = mongoose.Schema({
         minLength: 2,
         maxLength: 300
     },
-    course_id: {
+        course_id: {
         type: String,
         required: true,
         minLength: 4,
@@ -51,10 +51,6 @@ const courseSchema = mongoose.Schema({
         trim: true
     },
     duration: {
-        type: String,
-        trim: true,
-    },
-    lecture_count: {
         type: String,
         trim: true,
     },

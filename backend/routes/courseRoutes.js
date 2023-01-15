@@ -99,6 +99,33 @@ router.post("/create", async (req, res) => {
 
 
 
+router.put("/updateCourse/:customId", async (req, res) => {
+    let request_Id = req.params.customId;
+    console.log("\n\n\n\n\n\n\n\n\n\n\n\nreq.body",req.body);
+    // total_specific_get_requests++;
+    // console.log("get specific data called", total_specific_get_requests, "times");
+    try {
+        console.log("in try", request_Id);
+        const course_data = await courseModel.findOne({ link: request_Id });
+        if (course_data == null) {
+            return res.status(404).json({ message: "cant find course" });
+        }
+        else {
+            course_data.summary = req.body.summary;
+            course_data.level = req.body.level;
+            course_data.category = req.body.category;
+            await course_data.save();
+            console.log("updated");
+            console.log("new course_data",course_data);
+
+            res.status(200).json({ msg: "update successful", _course_data: course_data });
+        }
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: error.message });
+    }
+});
 
 router.post("/checkEnrolled", async (req, res) => {
     try {
@@ -134,9 +161,9 @@ router.post("/checkCreator", async (req, res) => {
         let _userid = req.body.userId;
         // console.log("req._courseId= ", _courseLink);
         // console.log("req._userid= ", _userid);
-        console.log("req.body           ",req.body);
+        console.log("req.body           ", req.body);
         const course = await courseModel.findOne({ link: _courseLink });
-        console.log("course           ",course);
+        console.log("course           ", course);
         if (course) {
             // console.log(typeof ("typeofuser.courses_enrolled", user.courses_enrolled));
             console.log("course.creator", course.creator);
@@ -249,6 +276,7 @@ router.post("/enrollCourse", async (req, res) => {
         res.status(500).send(err);
     }
 });
+
 
 
 
