@@ -150,7 +150,7 @@ export default function GetCourse() {
                 <div className="card-body">
                     {
                         alreadyEnrolled ?
-                        <Link to={"/course/" +course.link+"/learn"}><a className="btn btn-success" style={{ cursor: "pointer", marginRight: "5px" }}>go to videos</a></Link>
+                        <Link to={"/course/learn/" +course.link}><a className="btn btn-success" style={{ cursor: "pointer", marginRight: "5px" }}>go to videos</a></Link>
                         :
                         <button onClick={enrollCourse} className="btn btn-success" style={{ cursor: "pointer", marginRight: "5px" }}>enrollCourse</button>
                     }

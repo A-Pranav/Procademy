@@ -85,7 +85,7 @@ function App() {
 					<Route path="/course/create" element={<CreateCourse />} />
 					<Route path="/course/:link/" element={<GetCourse/>} />
 					<Route path="/course/edit/:link/" element={<EditCourse/>} />
-					<Route path="/course/:link/learn/" element={<LearnCourse/>} />
+					<Route path="/course/learn/:link/" element={<LearnCourse/>} />
 					{/* <Route path="/allusers" element={<GetAllUsers />} /> */}
 					{/* <Route path="/edituser/:customId" element={<EditUser />} /> */}
 				</Routes>

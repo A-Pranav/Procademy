@@ -15,6 +15,9 @@ const app=express();
 app.use(express.json());
 app.use(cors());
 app.use(express.static(path.join(process.cwd(),"public")));
+app.use("/videos/", express.static("./uploads"));
+
+
 // routes
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
