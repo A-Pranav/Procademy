@@ -5,7 +5,7 @@ var validateEmail = function (email) {
     return re.test(email)
 };
 
-// const imgPath = "../images/";
+const imgPath = "../images/";
 
 // const addressSchema = mongoose.Schema({
 //     streetAddress: {

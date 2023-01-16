@@ -3,12 +3,32 @@ import dotenv from "dotenv";
 import courseModel from "../database/course/courseModel.js"
 import videoModel from "../database/videos/videoModel.js";
 import multer from "multer";
+import AWS from "aws-sdk";
 import path from "path";
 
 dotenv.config();
 const router = express.Router();
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
+
+
+// AWS.config.update({
+//     accessKeyId: process.env.YOUR_ACCESS_KEY_ID,
+//     secretAccessKey: process.env.YOUR_SECRET_ACCESS_KEY
+// });
+// const s3 = new AWS.S3();
+
+// const uploadToS3 = (file) => {
+//     const params = {
+//         Bucket: 'YOUR_BUCKET_NAME',
+//         Key: file.originalname,
+//         Body: file.buffer,
+//         ContentType: file.mimetype,
+//         ACL: 'public-read'
+//     };
+
+//     return s3.upload(params).promise();
+// };
 
 
 const storage = multer.diskStorage({
@@ -39,6 +59,15 @@ router.post('/upload', upload.single('file'), async (req, res) => {
             error.httpStatusCode = 400;
             return next(error);
         }
+        uploadToS3(file)
+            .then(response => {
+                response.json({ file });
+            })
+            .catch(error => {
+                console.log(error);
+                res.status(500).json({ msg: 'Error uploading file to S3' });
+            });
+
         console.log("req.body=               ", req.body);
         let _videoTitle = req.body.title;
         let _videoSummary = req.body.discription;
