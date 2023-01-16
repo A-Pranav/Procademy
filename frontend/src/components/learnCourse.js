@@ -128,7 +128,7 @@ export default function LearnCourse() {
                     <br />
                     <br />
                     <br />
-                    <ViewVideo vid={videoLink} videoLink={`http://localhost:9669/video/${videoLink}`}></ViewVideo>
+                    <ViewVideo vid={videoLink} videoLink={`${videoLink}`}></ViewVideo>
                 </>
                 :
 

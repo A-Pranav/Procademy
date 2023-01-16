@@ -7,6 +7,7 @@ import userRoutes from "./routes/user_auth.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import videoRoutes from "./routes/videoRoutes.js";
 import multer from "multer";
+// import AWS
 
 dotenv.config();
 connector()
